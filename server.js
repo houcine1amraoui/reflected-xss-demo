@@ -9,7 +9,7 @@ const app = express();
 // Reflected XSS: Injected scripts reflect off a web server and execute immediately,
 // Occurs since user input is accepted without proper validation.
 // Example: Attacker can crafts the following URL and sends it to the victim
-// http://localhost:2000/hello?name=%3Cscript%3Ealert(1)%3C/script%3E
+// http://localhost:1000/hello?name=%3Cscript%3Ealert(1)%3C/script%3E
 app.get("/hello", function (req, res) {
   res.send(`Hello, ${req.query.name}`);
 });
