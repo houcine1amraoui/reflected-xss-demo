@@ -1,6 +1,8 @@
-const express = require("express");
-const app = express();
+import express from "express";
+import cookieParser from "cookie-parser";
 
+const app = express();
+app.use(cookieParser());
 // The /hello endpoint generates page output in code.
 // It expects a name as a parameter to say "Hello, $name"
 // and concatenates the user input to the output without escaping it.
@@ -8,13 +10,17 @@ const app = express();
 // However this endpoint is vulnerable to Reflected XSS
 // Reflected XSS: Injected scripts reflect off a web server and execute immediately,
 // Occurs since user input is accepted without proper validation.
-// Example: Attacker can crafts the following URL and sends it to the victim
-// http://localhost:1000/hello?name=%3Cscript%3Ealert(1)%3C/script%3E
+// Example: Attacker can craft the following URL and sends it to the victim
+// http://localhost:3000/hello?name=%3Cscript%3Ealert(document.cookie)%3C/script%3E
+
 app.get("/hello", function (req, res) {
+  res.cookie("sessionId", "123456", {
+    // httpOnly: true, // Security: prevents JS access
+  });
   res.send(`Hello, ${req.query.name}`);
 });
 
-const PORT = 1000;
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
